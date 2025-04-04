@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+#npm run prepare-commit-msg
+exec < /dev/tty && npx cz --hook || true
