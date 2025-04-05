@@ -38,7 +38,13 @@
           }
         </mat-form-field>
 
-        <button class="full-width" color="primary" mat-flat-button>
+        <button
+          (click)="signIn()"
+          [disabled]="!signInForm.valid"
+          [ngStyle]="{
+            'background-color': !signInForm.valid ? 'white' : '#9333ea',
+          }"
+          mat-flat-button>
           Sign In
         </button>
       </form>

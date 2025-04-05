@@ -59,7 +59,9 @@ export class SignInComponent implements OnInit, OnDestroy {
     event.stopPropagation();
   }
 
-  signIn(): void {}
+  signIn(): void {
+    //TODO: Handle sign in logic
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
