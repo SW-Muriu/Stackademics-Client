@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { tap } from 'rxjs';
+import { StorageService } from '../../../shared/services/storage-service/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,10 @@ import { tap } from 'rxjs';
 export class AuthService {
   private readonly tokenKey: string = 'jwt_token';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storageService: StorageService
+  ) {}
 
   login(username: string, password: string) {
     return this.http
@@ -17,14 +21,14 @@ export class AuthService {
       .pipe(
         tap(response => {
           if (response.status === 200 && response.entity?.token) {
-            localStorage.setItem(this.tokenKey, response.entity.token);
+            this.storageService.setItem(this.tokenKey, response.entity.token);
           }
         })
       );
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return this.storageService.getItem(this.tokenKey);
   }
 
   isLoggedIn(): boolean {
@@ -32,6 +36,6 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.tokenKey);
+    this.storageService.removeItem(this.tokenKey);
   }
 }

@@ -1,17 +1,26 @@
-import { HttpHandlerFn, HttpInterceptorFn } from '@angular/common/http';
-import { AuthService } from '../services/auth/auth.service';
+import {
+  HttpEvent,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+} from '@angular/common/http';
+import { inject } from '@angular/core';
+import { StorageService } from '../../shared/services/storage-service/storage.service';
+import { Observable } from 'rxjs';
 
-let authService: AuthService;
+export const jwtInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<any>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<any>> => {
+  const storageService: StorageService = inject(StorageService);
+  const access_token: string = storageService.getItem('access_token');
+  const isLogInRequest: boolean = req.url.includes('/signIn');
 
-export const jwtInterceptor: HttpInterceptorFn = (req, next: HttpHandlerFn) => {
-  const token = authService.getToken();
-
-  if (!token) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
-  return next(req);
+  const modifiedReq: HttpRequest<any> = req.clone({
+    setHeaders: {
+      'content-Type': 'application/json',
+      ...(isLogInRequest ? {} : { Authorization: `Bearer ${access_token}` }),
+    },
+  });
+  return next(modifiedReq);
 };
