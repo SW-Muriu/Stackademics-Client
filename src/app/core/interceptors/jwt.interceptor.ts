@@ -14,7 +14,7 @@ export const jwtInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
   const storageService: StorageService = inject(StorageService);
   const access_token: string = storageService.getItem('access_token');
-  const isLogInRequest: boolean = req.url.includes('/signIn');
+  const isLogInRequest: boolean = req.url.includes('/v1/auth/login');
 
   const modifiedReq: HttpRequest<any> = req.clone({
     setHeaders: {
@@ -22,5 +22,6 @@ export const jwtInterceptor: HttpInterceptorFn = (
       ...(isLogInRequest ? {} : { Authorization: `Bearer ${access_token}` }),
     },
   });
+  console.info('Final API: ', modifiedReq);
   return next(modifiedReq);
 };

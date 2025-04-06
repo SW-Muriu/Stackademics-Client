@@ -7,11 +7,11 @@
         <span matCardSubtitle>Username</span>
         <mat-form-field class="form-field">
           <input
-            formControlName="userName"
+            formControlName="username"
             matInput
             placeholder="Enter Username" />
           <mat-icon matSuffix style="color: #9333ea">person</mat-icon>
-          @if (signInForm.get('userName')?.hasError('required')) {
+          @if (signInForm.get('username')?.hasError('required')) {
             <mat-error> The password is required</mat-error>
           }
         </mat-form-field>

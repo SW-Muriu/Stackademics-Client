@@ -11,7 +11,7 @@ export class StorageService {
   constructor() {}
 
   setItem(key: string, value: any): void {
-    localStorage.removeItem('key');
+    localStorage.removeItem(key);
     const encryptedValue: string = this.encrypt(value);
     localStorage.setItem(key, encryptedValue);
   }

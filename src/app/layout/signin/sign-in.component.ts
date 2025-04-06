@@ -16,9 +16,11 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
+import { AuthService } from '../../core/services/auth/auth.service';
+import { NotificationService } from '../../shared/services/notification/notification.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -42,14 +44,16 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private readonly authManService: AuthService,
+    private notificationManService: NotificationService
   ) {
     this.signInForm = this.createAuthForm();
   }
 
   createAuthForm = (): FormGroup => {
     return this.fb.group({
-      userName: ['', [Validators.required]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
   };
@@ -60,7 +64,35 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   signIn(): void {
-    //TODO: Handle sign in logic
+    console.info('Sign in: ', this.signInForm.value);
+    this.authManService
+      .signIn(this.signInForm.value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.authManService.login(res.entity.token);
+            localStorage.setItem('token', res.entity.token);
+            this.router.navigate(['/dashboard']).then(() => {});
+            this.notificationManService.showNotificationMessage(
+              res.responseMessage,
+              'snackbar-success'
+            );
+          } else {
+            this.notificationManService.showNotificationMessage(
+              'Invalid Credentials',
+              'snackbar-danger'
+            );
+          }
+        },
+        error: (err: any) => {
+          console.info('err', err);
+          this.notificationManService.showNotificationMessage(
+            'Internal Server Error',
+            'snackbar-danger'
+          );
+        },
+      });
   }
 
   ngOnDestroy(): void {
