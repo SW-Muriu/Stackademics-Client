@@ -1,0 +1,73 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        //        "@typescript-eslint/indent": [2, 4],
+        "@angular-eslint/no-empty-lifecycle-method": 0,
+        "@angular-eslint/no-output-on-prefix": 0,
+        "@angular-eslint/no-host-metadata-property": 0,
+        "@typescript-eslint/no-empty-function": 0,
+        "@angular-eslint/component-class-suffix": 0,
+        "@angular-eslint/template/eqeqeq": 0,
+        "@typescript-eslint/no-namespace": 0,
+        "@typescript-eslint/no-unused-expressions": 0,
+        "@typescript-eslint/member-ordering": 0,
+        "@typescript-eslint/naming-convention": 0,
+        "@typescript-eslint/ban-types": 0,
+        "@typescript-eslint/ban-ts-comment": 0,
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-unused-vars": 0,
+        "@typescript-eslint/no-empty": 0,
+        "@typescript-eslint/no-empty-interface": 0,
+        "no-empty": 0,
+        "no-case-declarations": 0,
+        "no-underscore-dangle": 0,
+        "prefer-arrow/prefer-arrow-functions": 0,
+        "prefer-const": 0,
+        "@typescript-eslint/no-shadow": 0
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:@angular-eslint/template/accessibility",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "parser": "angular"
+          }
+        ]
+      }
+    }
+  ]
+}
