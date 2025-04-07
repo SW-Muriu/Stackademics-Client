@@ -1,0 +1,13 @@
+<mat-card appearance="outlined" class="summary-card">
+  <div class="card-container">
+    @for (summary of summaries; track summary) {
+      <div class="card-section">
+        <div class="card-title">{{ summary.name }}</div>
+        <div class="card-value">{{ summary.value }}</div>
+      </div>
+      @if (summary !== summaries[summaries.length - 1]) {
+        <div class="divider"></div>
+      }
+    }
+  </div>
+</mat-card>
