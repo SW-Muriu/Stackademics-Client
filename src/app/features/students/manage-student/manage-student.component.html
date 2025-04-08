@@ -1,0 +1,103 @@
+<section class="CU-page-styler">
+  <div>
+    <h2>{{ pageFunction }} Student</h2>
+  </div>
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <form [formGroup]="studentForm">
+        <div class="fieldset">
+          <!-- First Name -->
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>First Name</mat-label>
+            <input
+              formControlName="firstName"
+              matInput
+              placeholder="First Name" />
+            @if (studentForm.get('firstName')?.hasError('required')) {
+              <mat-error>First Name is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Last Name -->
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Last Name</mat-label>
+            <input
+              formControlName="lastName"
+              matInput
+              placeholder="Last Name" />
+            @if (studentForm.get('lastName')?.hasError('required')) {
+              <mat-error>Last Name is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!--          Date of birth-->
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Date of Birth</mat-label>
+            <input
+              [matDatepicker]="picker"
+              formControlName="dob"
+              matInput
+              placeholder="Date of Birth" />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              [for]="picker"
+              matIconSuffix></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (studentForm.get('dob')?.hasError('required')) {
+              <mat-error>Date of birth is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Classes  -->
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Class</mat-label>
+            <mat-select formControlName="className" placeholder="Select class">
+              @for (classChoice of classes; track classChoice) {
+                <mat-option [value]="classChoice.name">
+                  {{ classChoice.name }}
+                </mat-option>
+              }
+            </mat-select>
+            @if (studentForm.get('className')?.hasError('required')) {
+              <mat-error>Class is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!--          Scores -->
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Score</mat-label>
+            <input
+              formControlName="score"
+              matInput
+              placeholder="Score"
+              type="number" />
+            @if (studentForm.get('score')?.hasError('required')) {
+              <mat-error>Class is required</mat-error>
+            }
+            @if (isMax$()) {
+              <mat-hint>Scores cannot exceed 100</mat-hint>
+            }
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <!-- Submit Button -->
+      <button
+        (click)="onQuit()"
+        mat-flat-button
+        style="background-color: #9333ea; color: white">
+        Back
+      </button>
+      <button
+        (click)="onSubmit()"
+        [disabled]="!studentForm.valid"
+        [style.background-color]="studentForm.valid ? '#9333ea' : '#312E81'"
+        mat-flat-button
+        style="color: white"
+        type="submit">
+        Submit
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

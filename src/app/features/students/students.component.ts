@@ -116,7 +116,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   }
 
   onEdit = (rowData: any) => {
-    const route: string = `/dashboard/pType/manage`;
+    const route: string = `#/manage/student`;
     this.router
       .navigate([route], {
         queryParams: {
@@ -130,7 +130,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
   onViewMore = (rowData: any): void => {
     this.locationChangeService.setRowData(rowData);
-    const route: string = `/dashboard/data-viewer`;
+    const route: string = `#/dashboard/data-viewer`;
     this.router
       .navigate([route], {
         queryParams: {
@@ -142,7 +142,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   };
 
   onAddStudent = (): void => {
-    this.router.navigate(['/dashboard/pType/manage']).then(() => {});
+    this.router.navigate(['#/manage/student/']).then(() => {});
   };
 
   pageChanged(event: PageEvent): void {
@@ -174,7 +174,6 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
   protected onFilterTable($event: Event) {
     const filterValue = ($event.target as HTMLInputElement).value;
-    console.info('FilterValue: ', filterValue);
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();

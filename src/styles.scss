@@ -96,3 +96,62 @@ body {
     }
   }
 }
+
+.CU-page-styler {
+  margin: 2rem;
+  padding: 1rem;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+
+  .mat-mdc-card {
+    border-color: #9333ea;
+    border-radius: 12px;
+    margin: 10px 0 10px;
+    padding: 12px;
+    background-color: #2A3448;
+
+    .mat-mdc-card-content {
+      padding: 10px 0 5px 30px;
+
+      form {
+        margin-top: 5px;
+      }
+
+      .fieldset {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .topper {
+        margin-top: 5px;
+
+        .disability-container {
+          margin-top: 10px;
+        }
+      }
+
+      .form-field {
+        width: 30%;
+        margin-right: 10px;
+        --mdc-outlined-text-field-container-shape: 12px !important;
+
+        @media (max-width: 425px) {
+          width: 100%;
+        }
+      }
+    }
+
+    .mat-mdc-card-actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px 10px;
+
+      button {
+        margin-right: 10px;
+      }
+    }
+  }
+}

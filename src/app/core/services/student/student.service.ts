@@ -17,8 +17,8 @@ export class StudentService {
     return this._http.post<any>(url, studentData);
   };
 
-  public updateStudent = (id: number, updateData: any): Observable<any> => {
-    const url = `${this.BASE_URL}/update${id}`;
+  public updateStudent = (updateData: any): Observable<any> => {
+    const url = `${this.BASE_URL}/update`;
     return this._http.patch<any>(url, updateData);
   };
 
