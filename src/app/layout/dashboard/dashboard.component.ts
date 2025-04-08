@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, effect, OnDestroy, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../shared/services/notification/notification.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
@@ -45,7 +45,7 @@ import { StudentService } from '../../core/services/student/student.service';
 export class DashboardComponent implements OnDestroy {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   destroy$: Subject<boolean> = new Subject<boolean>();
-  summaryData: any;
+  summaryData$ = new ReplaySubject<{ name: string; value: number }[]>(1);
 
   constructor(
     private notificationManService: NotificationService,
@@ -53,12 +53,27 @@ export class DashboardComponent implements OnDestroy {
     private authManService: AuthService,
     private studentService: StudentService
   ) {
-    this.studentService.fetchTotalRecords();
-    this.summaryData = [
+    this.summaryData$.next([
       { name: 'Data Processes Runs', value: 32455 },
-      { name: 'Students', value: this.studentService.totalRecords() },
+      { name: 'Students', value: 0 },
       { name: 'Data Generation Runs', value: 34 },
-    ];
+    ]);
+
+    effect(() => {
+      const total = this.studentService.getTotalStudents();
+      console.info('Dashboard component:  Do we have the updates here yet?');
+      this.updateSummaryData(total);
+      console.info('Updated Value: ', this.studentService.getTotalStudents());
+    });
+  }
+
+  updateSummaryData(data: any) {
+    this.summaryData$.subscribe(ref => {
+      let student = ref.find(c => c.name === 'Students');
+      if (student) {
+        student.value = data;
+      }
+    });
   }
 
   logout(): void {

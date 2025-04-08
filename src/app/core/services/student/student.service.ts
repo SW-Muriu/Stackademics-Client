@@ -1,14 +1,14 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentService {
   BASE_URL: string = `${environment.apiUrl}/student`;
-  totalRecords: WritableSignal<number> = signal(0);
+  private totalStudents: WritableSignal<number> = signal(0);
 
   constructor(private _http: HttpClient) {}
 
@@ -33,16 +33,12 @@ export class StudentService {
     return this._http.delete<any>(url, deleteData);
   };
 
-  fetchTotalRecords(): void {
-    this.fetchStudents({
-      pageIndex: 1,
-      pageSize: 1,
-    }).pipe(
-      tap((resp: any) => {
-        this.totalRecords.set(resp.pagination.totalRecords);
-        console.info('Total records found: ', this.totalRecords());
-      })
-    );
+  setTotalStudents(count: number): void {
+    this.totalStudents.set(count);
+  }
+
+  getTotalStudents(): number {
+    return this.totalStudents();
   }
 
   //Params set up

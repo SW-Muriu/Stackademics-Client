@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { StudentService } from '../../../core/services/student/student.service';
+import { ReplaySubject, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-summary-card',
@@ -10,15 +10,23 @@ import { StudentService } from '../../../core/services/student/student.service';
   templateUrl: './summary-card.component.html',
   styleUrl: './summary-card.component.scss',
 })
-export class SummaryCardComponent {
-  @Input() summaries: { name: string; value: number }[] = [];
-  sampleSummaries = [
-    { name: 'Data Processes Runs', value: 32455 },
-    { name: 'Students', value: this.studentService.totalRecords() },
-    { name: 'Data Generation Runs', value: 34 },
-  ];
+export class SummaryCardComponent implements OnInit, OnDestroy {
+  @Input() summaries!: ReplaySubject<{ name: string; value: number }[]>;
+  studentCount: number = 0;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private studentService: StudentService) {
-    console.info('Total Records: ', this.studentService.totalRecords());
+  ngOnInit(): void {
+    this.summaries.pipe(takeUntil(this.destroy$)).subscribe({
+      next: data => {
+        const studentSummary = data.find(item => item.name === 'Students');
+        this.studentCount = studentSummary ? studentSummary.value : 0;
+        console.log('Summary Card: Updated the students count');
+      },
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

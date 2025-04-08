@@ -196,8 +196,12 @@ export class StudentsComponent implements OnInit, AfterViewInit {
             this.isTableEmpty$.update(() => res.entity?.length === 0);
             this.dataSource = new MatTableDataSource<any>(res?.entity);
             this.pageIndex = res.pagination.pageIndex;
-            this.itemsCount = res.pagination.totalRecords;
-            this.studentService.totalRecords.update(() => this.itemsCount);
+            this.itemsCount = res.pagination.totalRecords || 0;
+            this.studentService.setTotalStudents(this.itemsCount);
+            console.info(
+              'Total Records: ',
+              this.studentService.getTotalStudents()
+            );
             this.pageSize = res.pagination.pageSize;
           } else {
             this.toastManService.showNotificationMessage(
