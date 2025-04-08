@@ -1,0 +1,118 @@
+<!-- Top Buttons-->
+<section>
+  <div class="top-buttons">
+    <div>
+      <h2>Students</h2>
+    </div>
+    <div class="button-section">
+      <button mat-raised-button>Export</button>
+      <button [matMenuTriggerFor]="moreActions" mat-raised-button>
+        <mat-menu #moreActions="matMenu">
+          <button (click)="onReload()" mat-menu-item>
+            <mat-icon>replay</mat-icon>
+            Reload Data
+          </button>
+          <button (click)="onAddStudent()" mat-menu-item>
+            <mat-icon>add</mat-icon>
+            Student
+          </button>
+          <button (click)="searchField()" mat-menu-item>
+            <mat-icon>search</mat-icon>
+            Search Students
+          </button>
+        </mat-menu>
+        Actions
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+  </div>
+</section>
+<!-- Table Section-->
+<section>
+  <ng-container>
+    <mat-card class="table-card">
+      <div class="table-holder">
+        <div class="table-designer">
+          @if (searchField$()) {
+            <div class="search">
+              <mat-form-field appearance="outline" class="width">
+                <mat-label>Search</mat-label>
+                <mat-icon matPrefix>search</mat-icon>
+                <input
+                  placeholder="Search..."
+                  (keydown)="onFilterTable($event)"
+                  (keyup.enter)="optimallySearch($event)"
+                  matInput
+                  type="text" />
+              </mat-form-field>
+            </div>
+          }
+
+          <table
+            [dataSource]="dataSource"
+            class="scroll-table"
+            mat-table
+            matSort>
+            <!--Displayed Columns-->
+            @for (column of displayedColumns; track column) {
+              <ng-container matColumnDef="{{ column }}" [sticky]="$first">
+                <th
+                  *matHeaderCellDef
+                  mat-header-cell
+                  mat-sort-header
+                  sortActionDescription="Sort by {{ column }}">
+                  {{ column | camelToUpperCase }}
+                </th>
+                <td *matCellDef="let row; let i = index" mat-cell>
+                  @if (column === 'Action') {
+                    <div>
+                      <mat-icon [matMenuTriggerFor]="rowActions">
+                        <mat-menu #rowActions="matMenu">
+                          <button mat-menu-item (click)="onEdit(row)">
+                            <mat-icon>edit</mat-icon>
+                            Edit
+                          </button>
+                          <button mat-menu-item (click)="onViewMore(row)">
+                            <mat-icon>visibility</mat-icon>
+                            View
+                          </button>
+                          <button mat-menu-item (click)="onDeleteRow(row)">
+                            <mat-icon>delete_outline</mat-icon>
+                            Delete
+                          </button>
+                        </mat-menu>
+                        more_vert
+                      </mat-icon>
+                    </div>
+                  } @else if (column === 'id') {
+                    {{ i + 1 }}
+                  } @else {
+                    {{ row[column] }}
+                  }
+                </td>
+              </ng-container>
+            }
+            <tr
+              *matHeaderRowDef="displayedColumns; sticky: true"
+              mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+          </table>
+          @if (isTableEmpty$()) {
+            <div>
+              <app-empty-table-notice />
+            </div>
+          }
+          <mat-paginator
+            #paginator
+            (page)="pageChanged($event)"
+            [length]="itemsCount!"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            [pageSize]="pageSize"
+            aria-label="Select page of users"
+            showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </mat-card>
+  </ng-container>
+</section>

@@ -1,0 +1,60 @@
+.mat-mdc-card {
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+  0px -4px 8px rgba(0, 0, 0, 0.1),
+  4px 0px 8px rgba(0, 0, 0, 0.1),
+  -4px 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+mat-dialog-content {
+  text-align: center;
+  padding: 20px;
+
+  .header {
+    display: flex;
+    justify-self: right;
+    align-items: end;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .close-button {
+      background: none;
+      color: #999;
+
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+
+  p {
+    font-size: 16px;
+    color: #777;
+  }
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+
+  button {
+    flex: 1;
+    margin: 0 5px;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+
+  button[color='warn'] {
+    background-color: #f44336;
+    color: white;
+
+    &:hover {
+      background-color: #d32f2f;
+    }
+  }
+}
