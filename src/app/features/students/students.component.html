@@ -9,7 +9,6 @@
       <h2>Students</h2>
     </div>
     <div class="button-section">
-      <button mat-raised-button>Export</button>
       <button [matMenuTriggerFor]="moreActions" mat-raised-button>
         <mat-menu #moreActions="matMenu">
           <button (click)="onReload()" mat-menu-item>
@@ -23,6 +22,10 @@
           <button (click)="searchField()" mat-menu-item>
             <mat-icon>search</mat-icon>
             Search Students
+          </button>
+          <button mat-menu-item>
+            <mat-icon>download</mat-icon>
+            Export
           </button>
         </mat-menu>
         Actions

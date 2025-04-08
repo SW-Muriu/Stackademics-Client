@@ -35,7 +35,7 @@
         <div class="bottom-part">
           <mat-divider></mat-divider>
           <a
-            (click)="toggleSidenav()"
+            (click)="logout(true)"
             mat-list-item
             routerLink="/data-processing"
             routerLinkActive="active"
@@ -96,19 +96,39 @@
           <app-summary-card [summaries]="summaryData$" />
         </ng-container>
 
+        <router-outlet />
+
         <!-- Main Content -->
         <div class="dashboard-content">
-          <mat-card
-            appearance="outlined"
-            class="side-card left-card"></mat-card>
+          <!--          Data Generation-->
+          <mat-card appearance="outlined" class="side-card left-card">
+            <mat-card-title><h2>Data Generation</h2></mat-card-title>
+            <mat-card-content>
+              <p>Generate dummy student data and export it to an excel file</p>
+              <p>Wanna give it a try?</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button (click)="navToDataGeneration()" mat-flat-button>
+                Yes
+              </button>
+            </mat-card-actions>
+            <mat-divider></mat-divider>
+            <mat-card-title><h2>Data Generation</h2></mat-card-title>
+            <mat-card-content>
+              <p>Upload Excel with student data and export it to a csv file</p>
+              <p>Wanna give it a try?</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button (click)="navToDataProcessing()" mat-flat-button>
+                Yes
+              </button>
+            </mat-card-actions>
+          </mat-card>
 
-          <!--        Students Count-->
+          <!--        Students Management-->
           <mat-card appearance="outlined" class="center-card">
             <app-students />
           </mat-card>
-          <mat-card
-            appearance="outlined"
-            class="side-card right-card"></mat-card>
         </div>
       </section>
     </mat-sidenav-content>

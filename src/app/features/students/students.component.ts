@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { SummaryCardComponent } from '../../shared/components/summary-card/summary-card.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Subject, takeUntil } from 'rxjs';
+import { debounceTime, fromEvent, Subject, takeUntil } from 'rxjs';
 import {
   MatPaginator,
   MatPaginatorModule,
@@ -57,7 +57,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   isTableEmpty$: WritableSignal<boolean> = signal(true);
-  displayedColumns: string[] = [
+  allColumns: string[] = [
     'id',
     'firstName',
     'lastName',
@@ -66,6 +66,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     'className',
     'Action',
   ];
+  displayedColumns = [...this.allColumns];
   dataSource!: MatTableDataSource<any>;
   pageSize: number = 5;
   pageIndex: number = 1;
@@ -84,6 +85,14 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadStudents();
+
+    this.updateColumns(window.innerWidth);
+
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(200), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateColumns(window.innerWidth);
+      });
   }
 
   ngAfterViewInit(): void {
@@ -159,6 +168,24 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     if (this.searchField$()) return this.searchField$.set(false);
     return this.searchField$.set(true);
   };
+
+  updateColumns(width: number): void {
+    if (width <= 425) {
+      this.displayedColumns = ['id', 'firstName', 'Action'];
+    } else if (width <= 768) {
+      this.displayedColumns = ['id', 'firstName', 'score', 'Action'];
+    } else if (width <= 1024) {
+      this.displayedColumns = [
+        'id',
+        'firstName',
+        'score',
+        'className',
+        'Action',
+      ];
+    } else {
+      this.displayedColumns = [...this.allColumns];
+    }
+  }
 
   //DB Cost minimization
   protected optimallySearch($event?: Event) {

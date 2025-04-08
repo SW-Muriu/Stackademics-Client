@@ -5,7 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../shared/services/notification/notification.service';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { MatMenuModule } from '@angular/material/menu';
@@ -38,6 +43,7 @@ import { StudentService } from '../../core/services/student/student.service';
     StudentsComponent,
     SummaryCardComponent,
     MatSuffix,
+    RouterOutlet,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -76,7 +82,7 @@ export class DashboardComponent implements OnDestroy {
     });
   }
 
-  logout(): void {
+  logout(isToggle = false): void {
     this.authManService.logout();
     this.router.navigate(['/']).then(() => {
       this.notificationManService.showNotificationMessage(
@@ -84,11 +90,23 @@ export class DashboardComponent implements OnDestroy {
         'snackbar-success'
       );
     });
+
+    if (isToggle) {
+      this.toggleSidenav();
+    }
   }
 
   toggleSidenav(): void {
     this.sidenav.toggle().then(r => {});
   }
+
+  navToDataProcessing = (): void => {
+    this.router.navigate(['#/data/process']).then(() => {});
+  };
+
+  navToDataGeneration = (): void => {
+    this.router.navigate(['#/data/generate']).then(() => {});
+  };
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
