@@ -31,6 +31,7 @@ import { MatInputModule } from '@angular/material/input';
 import { EmptyTableNoticeComponent } from '../../shared/components/empty-table-notice/empty-table-notice.component';
 import { CamelToUpperCasePipe } from '../../shared/pipes/camel-to-upper-case.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-students',
@@ -49,6 +50,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     EmptyTableNoticeComponent,
     SummaryCardComponent,
     CamelToUpperCasePipe,
+    MatProgressSpinner,
   ],
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',
@@ -73,6 +75,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   itemsCount: number = 0;
   destroy$: Subject<boolean> = new Subject<boolean>();
   searchField$: WritableSignal<boolean> = signal(false);
+  generateReport$: WritableSignal<boolean> = signal(false);
 
   constructor(
     private router: Router,
@@ -205,6 +208,38 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  protected generateReport(): void {
+    this.generateReport$.set(true);
+    this.studentService
+      .generateStudentReport()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: Blob) => {
+          this.generateReport$.set(false);
+          const blob = new Blob([response], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'students-report.xlsx';
+          link.click();
+          window.URL.revokeObjectURL(url);
+          this.toastManService.showNotificationMessage(
+            'Student report generated successfully',
+            'snackbar-success'
+          );
+        },
+        error: (err: any) => {
+          this.generateReport$.set(false);
+          this.toastManService.showNotificationMessage(
+            'Failed to generate student report',
+            'snackbar-danger'
+          );
+        },
+      });
   }
 
   private loadStudents(searchTerm?: string): void {

@@ -9,28 +9,32 @@
       <h2>Students</h2>
     </div>
     <div class="button-section">
-      <button [matMenuTriggerFor]="moreActions" mat-raised-button>
-        <mat-menu #moreActions="matMenu">
-          <button (click)="onReload()" mat-menu-item>
-            <mat-icon>replay</mat-icon>
-            Reload Data
-          </button>
-          <button (click)="onAddStudent()" mat-menu-item>
-            <mat-icon>add</mat-icon>
-            Student
-          </button>
-          <button (click)="searchField()" mat-menu-item>
-            <mat-icon>search</mat-icon>
-            Search Students
-          </button>
-          <button mat-menu-item>
-            <mat-icon>download</mat-icon>
-            Export
-          </button>
-        </mat-menu>
-        Actions
-        <mat-icon>more_vert</mat-icon>
-      </button>
+      @if (generateReport$()) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <button [matMenuTriggerFor]="moreActions" mat-raised-button>
+          <mat-menu #moreActions="matMenu">
+            <button (click)="onReload()" mat-menu-item>
+              <mat-icon>replay</mat-icon>
+              Reload Data
+            </button>
+            <button (click)="onAddStudent()" mat-menu-item>
+              <mat-icon>add</mat-icon>
+              Student
+            </button>
+            <button (click)="searchField()" mat-menu-item>
+              <mat-icon>search</mat-icon>
+              Search Students
+            </button>
+            <button (click)="generateReport()" mat-menu-item>
+              <mat-icon>download</mat-icon>
+              Export
+            </button>
+          </mat-menu>
+          Actions
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      }
     </div>
   </div>
 </section>

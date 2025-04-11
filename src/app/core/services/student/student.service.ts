@@ -64,6 +64,12 @@ export class StudentService {
     return this.studentUploadRuns();
   }
 
+  generateStudentReport(): Observable<Blob> {
+    return this._http.get(`${this.BASE_URL}/report`, {
+      responseType: 'blob',
+    });
+  }
+
   //Params set up
   appendHttpParams(filters: any): HttpParams {
     let params: HttpParams = new HttpParams();
