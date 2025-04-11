@@ -84,7 +84,7 @@ export class ManageStudentComponent implements OnInit {
 
   initStudentForm(): FormGroup {
     return this.formBuilder.group({
-      studentId: ['', Validators.required],
+      studentId: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dob: ['', Validators.required],
@@ -109,7 +109,7 @@ export class ManageStudentComponent implements OnInit {
   }
 
   private postStudents = (): void => {
-    this.studentService.postStudent(this.studentForm.value).subscribe({
+    this.studentService.postStudent(this.studentForm.getRawValue()).subscribe({
       next: (resp: any) => {
         if (resp.statusCode === 200) {
           this.toastManService.showNotificationMessage(
@@ -134,27 +134,29 @@ export class ManageStudentComponent implements OnInit {
   };
 
   private putStudent = (): void => {
-    this.studentService.updateStudent(this.studentForm.value).subscribe({
-      next: (resp: any) => {
-        if (resp.statusCode === 200) {
+    this.studentService
+      .updateStudent(this.studentForm.getRawValue())
+      .subscribe({
+        next: (resp: any) => {
+          if (resp.statusCode === 200) {
+            this.toastManService.showNotificationMessage(
+              resp.message,
+              'snackbar-success'
+            );
+            this.router.navigate(['/dashboard']).then(r => {});
+          } else {
+            this.toastManService.showNotificationMessage(
+              resp.message,
+              'snackbar-danger'
+            );
+          }
+        },
+        error: err => {
           this.toastManService.showNotificationMessage(
-            resp.message,
-            'snackbar-success'
-          );
-          this.router.navigate(['/dashboard']).then(r => {});
-        } else {
-          this.toastManService.showNotificationMessage(
-            resp.message,
+            'Internal Server Error',
             'snackbar-danger'
           );
-        }
-      },
-      error: err => {
-        this.toastManService.showNotificationMessage(
-          'Internal Server Error',
-          'snackbar-danger'
-        );
-      },
-    });
+        },
+      });
   };
 }

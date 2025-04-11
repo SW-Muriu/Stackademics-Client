@@ -12,12 +12,14 @@
       <mat-nav-list class="mobile-nav-links">
         <a
           (click)="navToDataGeneration('yy')"
+          (keyup.enter)="navToDataGeneration('yy')"
           mat-list-item
           routerLink="/dashboard/data/generate"
           >Data Generation</a
         >
         <a
           (click)="navToDataProcessing('yy')"
+          (keyup.enter)="navToDataProcessing('yy')"
           mat-list-item
           routerLinkActive="active"
           >Data Processing</a

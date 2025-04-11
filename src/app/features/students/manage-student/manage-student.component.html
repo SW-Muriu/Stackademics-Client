@@ -38,7 +38,7 @@
               formControlName="dob"
               matInput
               placeholder="Date of Birth" />
-            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-hint style="color: white">MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle
               [for]="picker"
               matIconSuffix></mat-datepicker-toggle>
@@ -75,7 +75,7 @@
               <mat-error>Class is required</mat-error>
             }
             @if (isMax$()) {
-              <mat-hint>Scores cannot exceed 100</mat-hint>
+              <mat-hint style="color: white">Scores cannot exceed 100</mat-hint>
             }
           </mat-form-field>
         </div>

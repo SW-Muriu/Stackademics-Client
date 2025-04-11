@@ -64,7 +64,6 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   signIn(): void {
-    console.info('Sign in: ', this.signInForm.value);
     this.authManService
       .signIn(this.signInForm.value)
       .pipe(takeUntil(this.destroy$))
@@ -72,7 +71,6 @@ export class SignInComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.authManService.login(res.entity.token);
-            localStorage.setItem('token', res.entity.token);
             this.router.navigate(['/dashboard']).then(() => {});
             this.notificationManService.showNotificationMessage(
               res.message,
