@@ -73,7 +73,7 @@ export class SignInComponent implements OnInit, OnDestroy {
           if (res.statusCode == 200) {
             this.authManService.login(res.entity.token);
             localStorage.setItem('token', res.entity.token);
-            this.router.navigate(['/#']).then(() => {});
+            this.router.navigate(['/dashboard']).then(() => {});
             this.notificationManService.showNotificationMessage(
               res.message,
               'snackbar-success'

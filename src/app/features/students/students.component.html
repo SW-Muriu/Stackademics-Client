@@ -97,6 +97,8 @@
                     </div>
                   } @else if (column === 'id') {
                     {{ i + 1 }}
+                  } @else if (column === 'dob') {
+                    {{ row[column] | date: 'MMM d, y' }}
                   } @else {
                     {{ row[column] }}
                   }

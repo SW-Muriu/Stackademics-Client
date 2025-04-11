@@ -32,6 +32,7 @@ import { EmptyTableNoticeComponent } from '../../shared/components/empty-table-n
 import { CamelToUpperCasePipe } from '../../shared/pipes/camel-to-upper-case.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-students',
@@ -51,6 +52,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     SummaryCardComponent,
     CamelToUpperCasePipe,
     MatProgressSpinner,
+    DatePipe,
   ],
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',
@@ -128,7 +130,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   }
 
   onEdit = (rowData: any) => {
-    const route: string = `#/manage/student`;
+    const route: string = `dashboard/manage/student`;
     this.router
       .navigate([route], {
         queryParams: {
@@ -142,7 +144,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
   onViewMore = (rowData: any): void => {
     this.locationChangeService.setRowData(rowData);
-    const route: string = `#/dashboard/data-viewer`;
+    const route: string = `dashboard/data-viewer`;
     this.router
       .navigate([route], {
         queryParams: {
@@ -154,7 +156,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   };
 
   onAddStudent = (): void => {
-    this.router.navigate(['#/manage/student/']).then(() => {});
+    this.router.navigate(['dashboard/manage/student/']).then(() => {});
   };
 
   pageChanged(event: PageEvent): void {

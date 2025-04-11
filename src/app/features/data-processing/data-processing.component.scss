@@ -3,5 +3,11 @@
 }
 
 .mat-mdc-card-actions {
+  display: flex;
+  flex-wrap: wrap;
   padding: 2rem;
+  gap: 1rem;
+
+  button {
+  }
 }

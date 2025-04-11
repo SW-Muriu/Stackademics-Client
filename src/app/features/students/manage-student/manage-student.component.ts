@@ -70,7 +70,7 @@ export class ManageStudentComponent implements OnInit {
         }
       },
       error: err => {
-        console.error('Error in fetching query parameters');
+        console.error(err);
       },
     });
 
@@ -116,7 +116,7 @@ export class ManageStudentComponent implements OnInit {
             resp.message,
             'snackbar-success'
           );
-          this.router.navigate(['/#/']).then(r => {});
+          this.router.navigate(['/dashboard']).then(r => {});
         } else {
           this.toastManService.showNotificationMessage(
             resp.message,
@@ -124,7 +124,7 @@ export class ManageStudentComponent implements OnInit {
           );
         }
       },
-      error: err => {
+      error: () => {
         this.toastManService.showNotificationMessage(
           'Internal Server Error',
           'snackbar-danger'
@@ -141,7 +141,7 @@ export class ManageStudentComponent implements OnInit {
             resp.message,
             'snackbar-success'
           );
-          this.router.navigate(['/#/']).then(r => {});
+          this.router.navigate(['/dashboard']).then(r => {});
         } else {
           this.toastManService.showNotificationMessage(
             resp.message,
