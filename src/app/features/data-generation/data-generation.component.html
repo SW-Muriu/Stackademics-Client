@@ -28,12 +28,6 @@
     <mat-card-actions>
       <!-- Submit Button -->
       <button
-        (click)="onQuit()"
-        mat-flat-button
-        style="background-color: #9333ea; color: white">
-        Back
-      </button>
-      <button
         (click)="onSubmit()"
         [disabled]="!dataForm.valid"
         [style.background-color]="dataForm.valid ? '#9333ea' : '#312E81'"
@@ -48,4 +42,11 @@
       </button>
     </mat-card-actions>
   </mat-card>
+
+  <button
+    (click)="onQuit()"
+    mat-flat-button
+    style="background-color: #9333ea; color: white; margin-top: 1rem">
+    Back
+  </button>
 </section>

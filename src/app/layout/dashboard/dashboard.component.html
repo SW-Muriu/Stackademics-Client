@@ -13,7 +13,7 @@
         <a
           (click)="navToDataGeneration('yy')"
           mat-list-item
-          routerLink="dashboard/data/generate"
+          routerLink="/dashboard/data/generate"
           >Data Generation</a
         >
         <a
@@ -28,7 +28,7 @@
           <a
             (click)="logout(true)"
             mat-list-item
-            routerLink="dashboard/data/process"
+            routerLink="/dashboard/data/process"
             routerLinkActive="active"
             >Log out</a
           >
@@ -41,7 +41,9 @@
       <section class="top-nav">
         <mat-toolbar class="topper-content">
           <div class="logo">
-            <h1>Stackademics</h1>
+            <a mat-button routerLink="/dashboard" routerLinkActive="active"
+              ><h1>Stackademics</h1></a
+            >
           </div>
 
           <!-- Desktop Nav Links -->
@@ -54,10 +56,10 @@
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
             </button>
             <mat-menu #dataMenu="matMenu">
-              <button mat-menu-item routerLink="dashboard/data/generate">
+              <button mat-menu-item routerLink="/dashboard/data/generate">
                 Generation
               </button>
-              <button mat-menu-item routerLink="dashboard/data/process">
+              <button mat-menu-item routerLink="/dashboard/data/process">
                 Processing
               </button>
             </mat-menu>
@@ -82,45 +84,8 @@
 
       <!--      Dashboard Content-->
       <section class="content-container">
-        <!--        Summary Cards-->
-        <ng-container>
-          <app-summary-card [summaries]="summaryData$" />
-        </ng-container>
-
-        <router-outlet />
-
         <!-- Main Content -->
-        <div class="dashboard-content">
-          <!--          Data Generation-->
-          <mat-card appearance="outlined" class="side-card left-card">
-            <mat-card-title><h2>Data Generation</h2></mat-card-title>
-            <mat-card-content>
-              <p>Generate dummy student data and export it to an excel file</p>
-              <p>Wanna give it a try?</p>
-            </mat-card-content>
-            <mat-card-actions>
-              <button (click)="navToDataGeneration()" mat-flat-button>
-                Yes
-              </button>
-            </mat-card-actions>
-            <mat-divider></mat-divider>
-            <mat-card-title><h2>Data Processing</h2></mat-card-title>
-            <mat-card-content>
-              <p>Upload Excel with student data and update scores with 10</p>
-              <p>Wanna give it a try?</p>
-            </mat-card-content>
-            <mat-card-actions>
-              <button (click)="navToDataProcessing()" mat-flat-button>
-                Yes
-              </button>
-            </mat-card-actions>
-          </mat-card>
-
-          <!--        Students Management-->
-          <mat-card appearance="outlined" class="center-card">
-            <app-students />
-          </mat-card>
-        </div>
+        <router-outlet />
       </section>
     </mat-sidenav-content>
   </mat-sidenav-container>

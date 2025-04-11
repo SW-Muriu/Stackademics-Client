@@ -6,6 +6,7 @@ import { DataGenerationComponent } from './features/data-generation/data-generat
 import { DataProcessingComponent } from './features/data-processing/data-processing.component';
 import { authGuard } from './core/auth/guards/auth.guard';
 import { DataViewerComponent } from './shared/components/data-viewer/data-viewer.component';
+import { LandingPageComponent } from './layout/landing-page/landing-page.component';
 
 const title: string = 'Stackademics';
 export const routes: Routes = [
@@ -22,31 +23,37 @@ export const routes: Routes = [
         path: '',
         component: DashboardComponent,
         title: `${title} | Dashboard`,
-      },
-      {
-        path: 'manage/student',
-        component: ManageStudentComponent,
-        title: `${title} | Student`,
-      },
-      {
-        path: 'data/process',
-        component: DataProcessingComponent,
-        title: `${title} | Data Processing`,
-      },
-      {
-        path: 'data/generate',
-        component: DataGenerationComponent,
-        title: `${title} | Data Generation`,
-      },
-      {
-        path: 'data/generate',
-        component: DataGenerationComponent,
-        title: `${title} | Data Generation`,
-      },
-      {
-        path: 'data-viewer',
-        component: DataViewerComponent,
-        title: `${title} | Data View`,
+        children: [
+          {
+            path: '',
+            component: LandingPageComponent,
+          },
+          {
+            path: 'manage/student',
+            component: ManageStudentComponent,
+            title: `${title} | Student`,
+          },
+          {
+            path: 'data/process',
+            component: DataProcessingComponent,
+            title: `${title} | Data Processing`,
+          },
+          {
+            path: 'data/generate',
+            component: DataGenerationComponent,
+            title: `${title} | Data Generation`,
+          },
+          {
+            path: 'data/generate',
+            component: DataGenerationComponent,
+            title: `${title} | Data Generation`,
+          },
+          {
+            path: 'data-viewer',
+            component: DataViewerComponent,
+            title: `${title} | Data View`,
+          },
+        ],
       },
     ],
     canActivate: [authGuard],
