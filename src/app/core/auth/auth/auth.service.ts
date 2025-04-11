@@ -18,7 +18,9 @@ export class AuthService {
     private http: HttpClient,
     private storageService: StorageService,
     private router: Router
-  ) {}
+  ) {
+    this.startTokenCheck();
+  }
 
   //JWT Token Session Management
   login(token: string): void {
@@ -58,5 +60,25 @@ export class AuthService {
     const url = `${this.AUTH_URL}/login`;
     console.info('SET UP: ', url);
     return this.http.post(url, data);
+  }
+
+  private startTokenCheck() {
+    this.debounce(
+      () => {
+        const expired = this.isTokenExpired();
+        if (expired) {
+          this.logout();
+        }
+      },
+      10 * 60 * 1000
+    )();
+  }
+
+  private debounce(func: Function, wait: number) {
+    let timeout: any;
+    return () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(), wait);
+    };
   }
 }
