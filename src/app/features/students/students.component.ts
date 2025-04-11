@@ -5,6 +5,7 @@ import {
   signal,
   ViewChild,
   WritableSignal,
+  OnDestroy,
 } from '@angular/core';
 import { SummaryCardComponent } from '../../shared/components/summary-card/summary-card.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -57,7 +58,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',
 })
-export class StudentsComponent implements OnInit, AfterViewInit {
+export class StudentsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   isTableEmpty$: WritableSignal<boolean> = signal(true);
@@ -190,6 +191,11 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     } else {
       this.displayedColumns = [...this.allColumns];
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   //DB Cost minimization
