@@ -11,23 +11,14 @@
       </div>
       <mat-nav-list class="mobile-nav-links">
         <a
-          (click)="toggleSidenav()"
+          (click)="navToDataGeneration('yy')"
           mat-list-item
-          routerLink="/student"
-          routerLinkActive="active"
-          >Student</a
-        >
-        <a
-          (click)="toggleSidenav()"
-          mat-list-item
-          routerLink="/data-generation"
-          routerLinkActive="active"
+          routerLink="#/data/generate"
           >Data Generation</a
         >
         <a
-          (click)="toggleSidenav()"
+          (click)="navToDataProcessing('yy')"
           mat-list-item
-          routerLink="/data-processing"
           routerLinkActive="active"
           >Data Processing</a
         >
@@ -55,18 +46,16 @@
 
           <!-- Desktop Nav Links -->
           <div class="nav-links desktop-nav">
-            <a mat-button routerLink="/student" routerLinkActive="active"
-              >Student</a
-            >
+            <a mat-button routerLink="/" routerLinkActive="active">Student</a>
             <button [matMenuTriggerFor]="dataMenu" mat-button>
               Data
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
             </button>
             <mat-menu #dataMenu="matMenu">
-              <button mat-menu-item routerLink="/data-generation">
+              <button mat-menu-item routerLink="#/data/generate">
                 Generation
               </button>
-              <button mat-menu-item routerLink="/data-processing">
+              <button mat-menu-item routerLink="#/data/process">
                 Processing
               </button>
             </mat-menu>
@@ -113,9 +102,9 @@
               </button>
             </mat-card-actions>
             <mat-divider></mat-divider>
-            <mat-card-title><h2>Data Generation</h2></mat-card-title>
+            <mat-card-title><h2>Data Processing</h2></mat-card-title>
             <mat-card-content>
-              <p>Upload Excel with student data and export it to a csv file</p>
+              <p>Upload Excel with student data and update scores with 10</p>
               <p>Wanna give it a try?</p>
             </mat-card-content>
             <mat-card-actions>

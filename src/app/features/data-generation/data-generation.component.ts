@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,6 +11,7 @@ import {
   MatCard,
   MatCardActions,
   MatCardContent,
+  MatCardSubtitle,
 } from '@angular/material/card';
 import {
   MatDatepicker,
@@ -30,6 +31,7 @@ import { MatSelect } from '@angular/material/select';
 import { Location } from '@angular/common';
 import { ApiService } from '../../core/services/api/api.service';
 import { NotificationService } from '../../shared/services/notification/notification.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-data-generation',
@@ -52,6 +54,8 @@ import { NotificationService } from '../../shared/services/notification/notifica
     MatSelect,
     MatSuffix,
     ReactiveFormsModule,
+    MatCardSubtitle,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './data-generation.component.html',
   styleUrl: './data-generation.component.scss',
@@ -60,6 +64,7 @@ export class DataGenerationComponent {
   dataForm: FormGroup = this.fb.group({
     numberOfRecords: ['', Validators.required],
   });
+  isLoading$: WritableSignal<boolean> = signal(false);
 
   constructor(
     private fb: FormBuilder,
@@ -73,18 +78,22 @@ export class DataGenerationComponent {
   }
 
   onSubmit(): void {
+    this.isLoading$.set(true);
     this.apiService
       .post(`data/generate`, this.dataForm.value)
       .pipe()
       .subscribe({
         next: (resp: any) => {
           if (resp.statusCode === 200) {
+            this.isLoading$.set(false);
             this.toastManService.showNotificationMessage(
               `${resp.message} and saved in file path: ${resp.entity}`,
               'snackbar-success',
               10000
             );
+            this.location.back();
           } else {
+            this.isLoading$.set(false);
             this.toastManService.showNotificationMessage(
               resp.message,
               'snackbar-danger'
@@ -92,6 +101,7 @@ export class DataGenerationComponent {
           }
         },
         error: (err: any) => {
+          this.isLoading$.set(false);
           this.toastManService.showNotificationMessage(
             'Internal Server Error',
             'snackbar-success'

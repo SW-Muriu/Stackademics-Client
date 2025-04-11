@@ -9,6 +9,9 @@ import { Observable } from 'rxjs';
 export class StudentService {
   BASE_URL: string = `${environment.apiUrl}/student`;
   private totalStudents: WritableSignal<number> = signal(0);
+  private dataProcessRuns: WritableSignal<number> = signal(0);
+  private dataGenerationRuns: WritableSignal<number> = signal(0);
+  private studentUploadRuns: WritableSignal<number> = signal(0);
 
   constructor(private _http: HttpClient) {}
 
@@ -33,12 +36,32 @@ export class StudentService {
     return this._http.delete<any>(url, deleteData);
   };
 
-  setTotalStudents(count: number): void {
-    this.totalStudents.set(count);
+  setTotalStats(
+    totalStudents: number,
+    totalDataProcessRuns: number,
+    totalDataGenerationRuns: number,
+    totalStudentUpload: number
+  ): void {
+    this.totalStudents.set(totalStudents);
+    this.dataGenerationRuns.set(totalDataGenerationRuns);
+    this.dataProcessRuns.set(totalDataProcessRuns);
+    this.studentUploadRuns.set(totalStudentUpload);
+  }
+
+  getTotalProcessRuns(): number {
+    return this.dataProcessRuns();
   }
 
   getTotalStudents(): number {
     return this.totalStudents();
+  }
+
+  getTotalGenerationRuns(): number {
+    return this.dataGenerationRuns();
+  }
+
+  getTotalStudentUploadRuns(): number {
+    return this.studentUploadRuns();
   }
 
   //Params set up

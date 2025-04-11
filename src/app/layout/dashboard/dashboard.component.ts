@@ -60,24 +60,47 @@ export class DashboardComponent implements OnDestroy {
     private studentService: StudentService
   ) {
     this.summaryData$.next([
-      { name: 'Data Processes Runs', value: 32455 },
+      { name: 'Data Processes Runs', value: 0 },
+      { name: 'Student Upload Runs', value: 0 },
+      { name: 'Data Generation Runs', value: 0 },
       { name: 'Students', value: 0 },
-      { name: 'Data Generation Runs', value: 34 },
     ]);
 
     effect(() => {
-      const total = this.studentService.getTotalStudents();
+      const totalStudents = this.studentService.getTotalStudents();
+      const totalGenerationRuns = this.studentService.getTotalGenerationRuns();
+      const totalProcessRuns = this.studentService.getTotalProcessRuns();
+      const uploadRuns = this.studentService.getTotalStudentUploadRuns();
       console.info('Dashboard component:  Do we have the updates here yet?');
-      this.updateSummaryData(total);
-      console.info('Updated Value: ', this.studentService.getTotalStudents());
+      this.updateSummaryData(
+        totalStudents,
+        totalProcessRuns,
+        totalGenerationRuns,
+        uploadRuns
+      );
+      console.info(
+        'Updated Value: ',
+        this.studentService.getTotalStudentUploadRuns()
+      );
     });
   }
 
-  updateSummaryData(data: any) {
+  updateSummaryData(
+    studentsCount: number,
+    processRunsCount: number,
+    generationRunsCount: number,
+    studentUploadRuns: number
+  ) {
     this.summaryData$.subscribe(ref => {
       let student = ref.find(c => c.name === 'Students');
-      if (student) {
-        student.value = data;
+      let processRuns = ref.find(c => c.name === 'Data Processes Runs');
+      let generationRuns = ref.find(c => c.name === 'Data Generation Runs');
+      let uploadRuns = ref.find(c => c.name === 'Student Upload Runs');
+      if (student && processRuns && generationRuns && uploadRuns) {
+        student.value = studentsCount;
+        processRuns.value = processRunsCount;
+        generationRuns.value = generationRunsCount;
+        uploadRuns.value = studentUploadRuns;
       }
     });
   }
@@ -100,12 +123,18 @@ export class DashboardComponent implements OnDestroy {
     this.sidenav.toggle().then(r => {});
   }
 
-  navToDataProcessing = (): void => {
+  navToDataProcessing = (func?: string): void => {
     this.router.navigate(['#/data/process']).then(() => {});
+    if (func) {
+      this.toggleSidenav();
+    }
   };
 
-  navToDataGeneration = (): void => {
+  navToDataGeneration = (func?: string): void => {
     this.router.navigate(['#/data/generate']).then(() => {});
+    if (func) {
+      this.toggleSidenav();
+    }
   };
 
   ngOnDestroy(): void {

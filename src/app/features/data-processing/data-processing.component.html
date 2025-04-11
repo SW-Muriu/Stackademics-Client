@@ -1,1 +1,72 @@
-<p>data-processing works!</p>
+<section class="CU-page-styler">
+  <div>
+    <h2>Generate Student Data</h2>
+  </div>
+  <mat-card appearance="outlined">
+    <mat-card-actions>
+      <button
+        (click)="processLatestFile()"
+        mat-flat-button
+        style="background-color: #9333ea; color: white"
+        type="submit">
+        @if (processing) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          <span>Process Latest Excel to CSV</span>
+        }
+      </button>
+      <button
+        (click)="upload()"
+        mat-flat-button
+        style="background-color: #9333ea; color: white"
+        type="submit">
+        <span>Upload Excel</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  @if (isUpload$()) {
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <input
+          #fileInput
+          (change)="onFileSelected($event)"
+          accept=".xlsx, .xls"
+          style="display: none"
+          type="file" />
+        <button
+          (click)="fileInput.click()"
+          mat-raised-button
+          style="background-color: #9333ea; color: white">
+          <mat-icon>upload</mat-icon>
+          Choose Excel File
+        </button>
+        @if (selectedFile) {
+          <p>{{ selectedFile.name }}</p>
+        }
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          (click)="processFile()"
+          [disabled]="!selectedFile || processing"
+          [style.background-color]="selectedFile ? '#9333ea' : '#312E81'"
+          mat-flat-button
+          style="color: white"
+          type="submit">
+          @if (processing) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            <span>Process Students</span>
+          }
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+
+  <button
+    (click)="onQuit()"
+    mat-flat-button
+    style="background-color: #9333ea; color: white">
+    Back
+  </button>
+</section>

@@ -147,7 +147,7 @@ body {
     .mat-mdc-card-actions {
       display: flex;
       justify-content: space-between;
-      padding: 10px 15px 10px;
+      padding: 2rem 15px 10px;
 
       button {
         margin-right: 10px;
@@ -157,5 +157,9 @@ body {
 
   @media screen and (max-width: 768px) {
     margin: 2rem;
+  }
+
+  @media screen and (max-width: 425px) {
+    margin: 0.3rem;
   }
 }

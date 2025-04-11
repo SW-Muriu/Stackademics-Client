@@ -220,13 +220,14 @@ export class StudentsComponent implements OnInit, AfterViewInit {
         next: (res: any) => {
           if (res.statusCode === 200) {
             this.isTableEmpty$.update(() => res.entity?.length === 0);
-            this.dataSource = new MatTableDataSource<any>(res?.entity);
+            this.dataSource = new MatTableDataSource<any>(res?.entity.students);
             this.pageIndex = res.pagination.pageIndex;
             this.itemsCount = res.pagination.totalRecords || 0;
-            this.studentService.setTotalStudents(this.itemsCount);
-            console.info(
-              'Total Records: ',
-              this.studentService.getTotalStudents()
+            this.studentService.setTotalStats(
+              this.itemsCount,
+              res?.entity.dataProcessRuns,
+              res?.entity.dataGenerationRuns,
+              res?.entity.studentUploadRuns
             );
             this.pageSize = res.pagination.pageSize;
           } else {

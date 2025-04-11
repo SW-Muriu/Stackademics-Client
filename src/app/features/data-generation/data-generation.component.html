@@ -4,16 +4,19 @@
   </div>
   <mat-card appearance="outlined">
     <mat-card-content>
+      <mat-card-subtitle style="color: white"
+        >Please input number of records to generate
+      </mat-card-subtitle>
       <form [formGroup]="dataForm">
         <div class="fieldset">
           <!-- First Name -->
           <mat-form-field appearance="fill" class="form-field">
-            <mat-label>Number of records to generate</mat-label>
-            <mat-hint>The range of records: 1 - 1 Million</mat-hint>
+            <mat-label>No. records</mat-label>
+            <mat-hint>Range: 1 - 1 Million Records</mat-hint>
             <input
               formControlName="numberOfRecords"
               matInput
-              placeholder="How many records do you want?"
+              placeholder="No. records"
               type="number" />
             @if (dataForm.get('numberOfRequests')?.hasError('required')) {
               <mat-error>First Name is required</mat-error>
@@ -37,7 +40,11 @@
         mat-flat-button
         style="color: white"
         type="submit">
-        Submit
+        @if (isLoading$()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          <span>Submit</span>
+        }
       </button>
     </mat-card-actions>
   </mat-card>
