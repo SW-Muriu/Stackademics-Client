@@ -1,0 +1,41 @@
+<section class="CU-page-styler">
+  <mat-card appearance="outlined">
+    <mat-card-header>{{ title }}</mat-card-header>
+    <mat-card-content>
+      <!--    Listed Items-->
+      <ng-container>
+        <mat-list>
+          <div class="items-grid">
+            @for (detail of filteredDetails; track detail) {
+              <mat-list-item>
+                <span matListItemTitle style="color: #f7f7f7">
+                  {{ detail.label | camelToUpperCase }}
+                </span>
+                <span matListItemLine style="color: #f7f7f7">
+                  @if (
+                    detail.label === 'postedTime' ||
+                    detail.label === 'updatedAt' ||
+                    detail.label === 'modifiedTime' ||
+                    detail.label === 'dob'
+                  ) {
+                    {{ detail.value | date: 'MMM d, y' }}
+                  } @else {
+                    {{ detail.value }}
+                  }
+                </span>
+              </mat-list-item>
+            }
+          </div>
+        </mat-list>
+      </ng-container>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        (click)="onCancel()"
+        mat-flat-button
+        style="background-color: #9333ea; color: white">
+        Quit
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>
