@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { SummaryCardComponent } from '../../shared/components/summary-card/summary-card.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Subject, takeUntil } from 'rxjs';
+import { debounceTime, fromEvent, Subject, takeUntil } from 'rxjs';
 import {
   MatPaginator,
   MatPaginatorModule,
@@ -31,6 +31,7 @@ import { MatInputModule } from '@angular/material/input';
 import { EmptyTableNoticeComponent } from '../../shared/components/empty-table-notice/empty-table-notice.component';
 import { CamelToUpperCasePipe } from '../../shared/pipes/camel-to-upper-case.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-students',
@@ -49,6 +50,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     EmptyTableNoticeComponent,
     SummaryCardComponent,
     CamelToUpperCasePipe,
+    MatProgressSpinner,
   ],
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',
@@ -57,7 +59,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   isTableEmpty$: WritableSignal<boolean> = signal(true);
-  displayedColumns: string[] = [
+  allColumns: string[] = [
     'id',
     'firstName',
     'lastName',
@@ -66,12 +68,14 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     'className',
     'Action',
   ];
+  displayedColumns = [...this.allColumns];
   dataSource!: MatTableDataSource<any>;
   pageSize: number = 5;
   pageIndex: number = 1;
   itemsCount: number = 0;
   destroy$: Subject<boolean> = new Subject<boolean>();
   searchField$: WritableSignal<boolean> = signal(false);
+  generateReport$: WritableSignal<boolean> = signal(false);
 
   constructor(
     private router: Router,
@@ -84,6 +88,14 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadStudents();
+
+    this.updateColumns(window.innerWidth);
+
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(200), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateColumns(window.innerWidth);
+      });
   }
 
   ngAfterViewInit(): void {
@@ -116,7 +128,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   }
 
   onEdit = (rowData: any) => {
-    const route: string = `/dashboard/pType/manage`;
+    const route: string = `#/manage/student`;
     this.router
       .navigate([route], {
         queryParams: {
@@ -130,7 +142,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
   onViewMore = (rowData: any): void => {
     this.locationChangeService.setRowData(rowData);
-    const route: string = `/dashboard/data-viewer`;
+    const route: string = `#/dashboard/data-viewer`;
     this.router
       .navigate([route], {
         queryParams: {
@@ -142,7 +154,7 @@ export class StudentsComponent implements OnInit, AfterViewInit {
   };
 
   onAddStudent = (): void => {
-    this.router.navigate(['/dashboard/pType/manage']).then(() => {});
+    this.router.navigate(['#/manage/student/']).then(() => {});
   };
 
   pageChanged(event: PageEvent): void {
@@ -160,6 +172,24 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     return this.searchField$.set(true);
   };
 
+  updateColumns(width: number): void {
+    if (width <= 425) {
+      this.displayedColumns = ['id', 'firstName', 'Action'];
+    } else if (width <= 768) {
+      this.displayedColumns = ['id', 'firstName', 'score', 'Action'];
+    } else if (width <= 1024) {
+      this.displayedColumns = [
+        'id',
+        'firstName',
+        'score',
+        'className',
+        'Action',
+      ];
+    } else {
+      this.displayedColumns = [...this.allColumns];
+    }
+  }
+
   //DB Cost minimization
   protected optimallySearch($event?: Event) {
     let searchTerm;
@@ -174,11 +204,42 @@ export class StudentsComponent implements OnInit, AfterViewInit {
 
   protected onFilterTable($event: Event) {
     const filterValue = ($event.target as HTMLInputElement).value;
-    console.info('FilterValue: ', filterValue);
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  protected generateReport(): void {
+    this.generateReport$.set(true);
+    this.studentService
+      .generateStudentReport()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: Blob) => {
+          this.generateReport$.set(false);
+          const blob = new Blob([response], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'students-report.xlsx';
+          link.click();
+          window.URL.revokeObjectURL(url);
+          this.toastManService.showNotificationMessage(
+            'Student report generated successfully',
+            'snackbar-success'
+          );
+        },
+        error: (err: any) => {
+          this.generateReport$.set(false);
+          this.toastManService.showNotificationMessage(
+            'Failed to generate student report',
+            'snackbar-danger'
+          );
+        },
+      });
   }
 
   private loadStudents(searchTerm?: string): void {
@@ -194,13 +255,14 @@ export class StudentsComponent implements OnInit, AfterViewInit {
         next: (res: any) => {
           if (res.statusCode === 200) {
             this.isTableEmpty$.update(() => res.entity?.length === 0);
-            this.dataSource = new MatTableDataSource<any>(res?.entity);
+            this.dataSource = new MatTableDataSource<any>(res?.entity.students);
             this.pageIndex = res.pagination.pageIndex;
             this.itemsCount = res.pagination.totalRecords || 0;
-            this.studentService.setTotalStudents(this.itemsCount);
-            console.info(
-              'Total Records: ',
-              this.studentService.getTotalStudents()
+            this.studentService.setTotalStats(
+              this.itemsCount,
+              res?.entity.dataProcessRuns,
+              res?.entity.dataGenerationRuns,
+              res?.entity.studentUploadRuns
             );
             this.pageSize = res.pagination.pageSize;
           } else {

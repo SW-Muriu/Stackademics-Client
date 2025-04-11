@@ -20,9 +20,7 @@ export class ApiService {
   }
 
   //File upload
-  upload(url: string, file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
+  upload(url: string, formData: FormData): Observable<any> {
     return this.http
       .post(`${environment.apiUrl}/${url}`, formData)
       .pipe(catchError(this.handleError));
