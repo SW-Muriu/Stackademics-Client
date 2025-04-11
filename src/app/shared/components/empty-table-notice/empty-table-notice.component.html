@@ -1,0 +1,11 @@
+<ng-container>
+  <!--  Deferred till observable is subscribed to and reads empty-->
+  @defer {
+    <div class="empty-table-container">
+      <div class="image-container">
+        <img src="./assets/images/no_data_icon.png" alt="No Data" />
+        <p>No Existing Data</p>
+      </div>
+    </div>
+  } @placeholder (minimum 500ms) {}
+</ng-container>

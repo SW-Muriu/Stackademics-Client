@@ -1,0 +1,116 @@
+<section class="dashboard-container">
+  <!-- Top Navigation Bar -->
+  <mat-sidenav-container class="sidenav-container">
+    <!-- Mobile Sidenav -->
+    <mat-sidenav #sidenav class="mobile-sidenav" mode="over" position="end">
+      <div class="sidenav-header">
+        <h2>Stackademics</h2>
+        <button (click)="toggleSidenav()" mat-icon-button>
+          <mat-icon style="color: #f3f4f6">close</mat-icon>
+        </button>
+      </div>
+      <mat-nav-list class="mobile-nav-links">
+        <a
+          (click)="toggleSidenav()"
+          mat-list-item
+          routerLink="/student"
+          routerLinkActive="active"
+          >Student</a
+        >
+        <a
+          (click)="toggleSidenav()"
+          mat-list-item
+          routerLink="/data-generation"
+          routerLinkActive="active"
+          >Data Generation</a
+        >
+        <a
+          (click)="toggleSidenav()"
+          mat-list-item
+          routerLink="/data-processing"
+          routerLinkActive="active"
+          >Data Processing</a
+        >
+
+        <div class="bottom-part">
+          <mat-divider></mat-divider>
+          <a
+            (click)="toggleSidenav()"
+            mat-list-item
+            routerLink="/data-processing"
+            routerLinkActive="active"
+            >Log out</a
+          >
+        </div>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- Main Content -->
+    <mat-sidenav-content style="background-color: #0f172a">
+      <section class="top-nav">
+        <mat-toolbar class="topper-content">
+          <div class="logo">
+            <h1>Stackademics</h1>
+          </div>
+
+          <!-- Desktop Nav Links -->
+          <div class="nav-links desktop-nav">
+            <a mat-button routerLink="/student" routerLinkActive="active"
+              >Student</a
+            >
+            <button [matMenuTriggerFor]="dataMenu" mat-button>
+              Data
+              <mat-icon matSuffix>arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #dataMenu="matMenu">
+              <button mat-menu-item routerLink="/data-generation">
+                Generation
+              </button>
+              <button mat-menu-item routerLink="/data-processing">
+                Processing
+              </button>
+            </mat-menu>
+          </div>
+
+          <!-- Hamburger Icon for Mobile -->
+          <button
+            (click)="toggleSidenav()"
+            class="mobile-menu-toggle"
+            mat-icon-button>
+            <mat-icon style="color: #f3f4f6">menu</mat-icon>
+          </button>
+
+          <!-- Right Side: Logout -->
+          <div class="user-actions">
+            <button (click)="logout()" mat-icon-button matTooltip="Logout">
+              <mat-icon style="color: white">person</mat-icon>
+            </button>
+          </div>
+        </mat-toolbar>
+      </section>
+
+      <!--      Dashboard Content-->
+      <section class="content-container">
+        <!--        Summary Cards-->
+        <ng-container>
+          <app-summary-card [summaries]="summaryData$" />
+        </ng-container>
+
+        <!-- Main Content -->
+        <div class="dashboard-content">
+          <mat-card
+            appearance="outlined"
+            class="side-card left-card"></mat-card>
+
+          <!--        Students Count-->
+          <mat-card appearance="outlined" class="center-card">
+            <app-students />
+          </mat-card>
+          <mat-card
+            appearance="outlined"
+            class="side-card right-card"></mat-card>
+        </div>
+      </section>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</section>

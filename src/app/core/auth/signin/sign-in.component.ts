@@ -19,8 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AuthService } from '../../core/services/auth/auth.service';
-import { NotificationService } from '../../shared/services/notification/notification.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { NotificationService } from '../../../shared/services/notification/notification.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -73,9 +73,9 @@ export class SignInComponent implements OnInit, OnDestroy {
           if (res.statusCode == 200) {
             this.authManService.login(res.entity.token);
             localStorage.setItem('token', res.entity.token);
-            this.router.navigate(['/dashboard']).then(() => {});
+            this.router.navigate(['/#']).then(() => {});
             this.notificationManService.showNotificationMessage(
-              res.responseMessage,
+              res.message,
               'snackbar-success'
             );
           } else {

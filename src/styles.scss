@@ -10,3 +10,89 @@ body {
   background-color: #0F172A;
   color: white;
 }
+
+.top-buttons {
+  margin: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .button-section {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+      background-color: #9333ea;
+      color: white;
+    }
+  }
+}
+
+.table-card {
+  margin: 15px 5px 5px 5px;
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: #0F172A;
+
+  .table-holder {
+    border-radius: 12px;
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #333333;
+      }
+    }
+
+    .table-designer {
+      max-width: 100%;
+      white-space: pre;
+      overflow: auto;
+      scrollbar-width: thin;
+
+      .search {
+        padding: 0.3rem 0;
+        display: flex;
+        justify-content: center;
+
+        .width {
+          width: 20%;
+          @media screen and (max-width: 1440px) {
+            width: auto;
+          }
+        }
+      }
+
+      .scroll-table {
+        overflow: auto;
+        scrollbar-width: thin;
+        border-radius: 12px;
+
+        .mat-sort-header-content {
+          font-size: 20px;
+        }
+
+        .mat-mdc-header-row {
+          th.mat-mdc-header-cell {
+            background-color: #312e81;
+            color: white;
+          }
+
+          .mat-mdc-sort-header-arrow {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}

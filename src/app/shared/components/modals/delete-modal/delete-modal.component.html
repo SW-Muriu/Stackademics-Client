@@ -1,0 +1,20 @@
+<mat-card appearance="outlined">
+  <mat-dialog-content>
+    <div class="header">
+      <button (click)="cancel()" color="warn" mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <p>{{ deleteText }}</p>
+    <div>
+      <mat-icon color="warn"> warning</mat-icon>
+    </div>
+  </mat-dialog-content>
+  <mat-divider></mat-divider>
+  <mat-dialog-actions>
+    <button (click)="cancel()" mat-button>Cancel</button>
+    <button (click)="deleteModuleRequest()" color="warn" mat-button>
+      Delete
+    </button>
+  </mat-dialog-actions>
+</mat-card>
