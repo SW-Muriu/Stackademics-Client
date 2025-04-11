@@ -5,6 +5,7 @@ import { ManageStudentComponent } from './features/students/manage-student/manag
 import { DataGenerationComponent } from './features/data-generation/data-generation.component';
 import { DataProcessingComponent } from './features/data-processing/data-processing.component';
 import { authGuard } from './core/auth/guards/auth.guard';
+import { DataViewerComponent } from './shared/components/data-viewer/data-viewer.component';
 
 const title: string = 'Stackademics';
 export const routes: Routes = [
@@ -15,7 +16,7 @@ export const routes: Routes = [
     title: `${title}`,
   },
   {
-    path: '#',
+    path: 'dashboard',
     children: [
       {
         path: '',
@@ -36,6 +37,16 @@ export const routes: Routes = [
         path: 'data/generate',
         component: DataGenerationComponent,
         title: `${title} | Data Generation`,
+      },
+      {
+        path: 'data/generate',
+        component: DataGenerationComponent,
+        title: `${title} | Data Generation`,
+      },
+      {
+        path: 'data-viewer',
+        component: DataViewerComponent,
+        title: `${title} | Data View`,
       },
     ],
     canActivate: [authGuard],

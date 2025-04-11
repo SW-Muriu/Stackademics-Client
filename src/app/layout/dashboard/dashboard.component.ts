@@ -124,14 +124,14 @@ export class DashboardComponent implements OnDestroy {
   }
 
   navToDataProcessing = (func?: string): void => {
-    this.router.navigate(['#/data/process']).then(() => {});
+    this.router.navigate(['dashboard/data/process']).then(() => {});
     if (func) {
       this.toggleSidenav();
     }
   };
 
   navToDataGeneration = (func?: string): void => {
-    this.router.navigate(['#/data/generate']).then(() => {});
+    this.router.navigate(['dashboard/data/generate']).then(() => {});
     if (func) {
       this.toggleSidenav();
     }
