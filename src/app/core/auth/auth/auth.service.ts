@@ -5,6 +5,7 @@ import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 import { CurrentUser } from '../../../shared/models/interfaces';
 import { Observable } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,9 @@ export class AuthService {
     private http: HttpClient,
     private storageService: StorageService,
     private router: Router
-  ) {}
+  ) {
+    this.startTokenCheck();
+  }
 
   //JWT Token Session Management
   login(token: string): void {
@@ -32,8 +35,24 @@ export class AuthService {
   logout(): void {
     this.token = null;
     this.storageService.removeItem('access_token');
-    console.info('Access Token: ');
     this.router.navigate(['/auth']).then(r => {});
+  }
+
+  getToken(): string | null {
+    return this.token || this.storageService.getItem('access_token');
+  }
+
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) return true;
+
+    const decoded: any = jwtDecode(token);
+    const currentTime: number = Date.now() / 1000; // Convert to seconds
+    return decoded.exp < currentTime; // Check if expired
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken() && !this.isTokenExpired();
   }
 
   // API calls
@@ -41,5 +60,25 @@ export class AuthService {
     const url = `${this.AUTH_URL}/login`;
     console.info('SET UP: ', url);
     return this.http.post(url, data);
+  }
+
+  private startTokenCheck() {
+    this.debounce(
+      () => {
+        const expired = this.isTokenExpired();
+        if (expired) {
+          this.logout();
+        }
+      },
+      10 * 60 * 1000
+    )();
+  }
+
+  private debounce(func: Function, wait: number) {
+    let timeout: any;
+    return () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(), wait);
+    };
   }
 }

@@ -11,7 +11,7 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { AuthService } from '../../core/auth/auth/auth.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';

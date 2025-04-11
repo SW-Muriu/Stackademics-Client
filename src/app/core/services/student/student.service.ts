@@ -22,7 +22,7 @@ export class StudentService {
 
   public updateStudent = (updateData: any): Observable<any> => {
     const url = `${this.BASE_URL}/update`;
-    return this._http.patch<any>(url, updateData);
+    return this._http.put<any>(url, updateData);
   };
 
   public fetchStudents = (filters: any): Observable<any> => {
@@ -33,7 +33,7 @@ export class StudentService {
   public deleteStudent = (deleteData: any): Observable<any> => {
     const url = `${this.BASE_URL}/delete`;
     console.info('deleteData', deleteData);
-    return this._http.delete<any>(url, deleteData);
+    return this._http.put<any>(url, deleteData);
   };
 
   setTotalStats(
