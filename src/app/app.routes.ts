@@ -4,6 +4,7 @@ import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { ManageStudentComponent } from './features/students/manage-student/manage-student.component';
 import { DataGenerationComponent } from './features/data-generation/data-generation.component';
 import { DataProcessingComponent } from './features/data-processing/data-processing.component';
+import { authGuard } from './core/auth/guards/auth.guard';
 
 const title: string = 'Stackademics';
 export const routes: Routes = [
@@ -37,6 +38,7 @@ export const routes: Routes = [
         title: `${title} | Data Generation`,
       },
     ],
+    canActivate: [authGuard],
   },
   { path: '**', redirectTo: '' },
 ];

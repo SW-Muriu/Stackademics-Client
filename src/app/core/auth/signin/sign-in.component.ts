@@ -19,7 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { NotificationService } from '../../../shared/services/notification/notification.service';
 
 @Component({
