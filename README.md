@@ -1,5 +1,7 @@
 # Stackademics
 
+The server side is located [HERE](https://github.com/SW-Muriu/Stackademics) and the explanation is in this [DEMO](https://drive.google.com/file/d/1G7bCZC1G452lUQWpC3oTAP4UMshNYrDn/view?usp=sharing)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.
 
 ## Development server
